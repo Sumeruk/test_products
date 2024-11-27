@@ -2,9 +2,14 @@ package ru.Zinchenko;
 
 public class Main {
     public static void main(String[] args) {
-        TestProducts testFruit = new TestFruit();
+        TestProducts testFruits =
+                new TestAddToTable("банан", "Дуриан", "Фрукт", false, true);
 
-        System.out.println(testFruit.startTest());
+        TestProducts testVegetables =
+                new TestAddToTable("картофель", "Мандурия", "Овощ", false, true);
+
+        System.out.println(testFruits.runTest());
+        System.out.println(testVegetables.runTest());
 
 
     }
