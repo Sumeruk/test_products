@@ -1,51 +1,59 @@
 package ru.Zinchenko;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIf;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.utils.TypeOfProduct;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductTest extends BaseTest {
-    private static ProductsPage productsPage;
+    private static ProductsPage productsPage = new ProductsPage(driver);
+    private static List<ProductItem> fruits = new ArrayList<>(Arrays.asList(
+            new ProductItem("банан", TypeOfProduct.FRUIT.getName(), false),
+            new ProductItem("Дуриан", TypeOfProduct.FRUIT.getName(), true)
+    ));
+
+    private static List<ProductItem> vegetables = new ArrayList<>(Arrays.asList(
+            new ProductItem("картофель", TypeOfProduct.VEGETABLE.getName(), false),
+            new ProductItem("Мандурия", TypeOfProduct.VEGETABLE.getName(), true)
+    ));
 
     @AfterEach
     public void resetValues(){
         productsPage.reset();
     }
     @Test
+    @DisabledIf("isFruitsAlreadyExists")
     public void testAddFruits(){
-        productsPage = new ProductsPage(driver);
+//        productsPage = new ProductsPage(driver);
 
-        ProductItem itemBanana = new ProductItem("банан", TypeOfProduct.FRUIT.getName(), false);
-        ProductItem itemDurian = new ProductItem("Дуриан", TypeOfProduct.FRUIT.getName(), true);
+        productsPage.addNewProduct(fruits.get(0));
+        productsPage.addNewProduct(fruits.get(1));
 
-        productsPage.addNewProduct(itemBanana);
-        productsPage.addNewProduct(itemDurian);
-
-        List<ProductItem> items = new ArrayList<>();
-        items.add(itemBanana);
-        items.add(itemDurian);
-
-        Assertions.assertTrue(productsPage.isAddingValid(items));
+        Assertions.assertTrue(productsPage.isAddingValid(fruits));
     }
 
     @Test
+    @DisabledIf("isVegetablesAlreadyExists")
     public void testAddVegetables(){
-        productsPage = new ProductsPage(driver);
 
-        ProductItem item1 = new ProductItem("картофель", TypeOfProduct.VEGETABLE.getName(), false);
-        ProductItem item2 = new ProductItem("Мандурия", TypeOfProduct.VEGETABLE.getName(), true);
+        productsPage.addNewProduct(vegetables.get(0));
+        productsPage.addNewProduct(vegetables.get(1));
 
-        productsPage.addNewProduct(item1);
-        productsPage.addNewProduct(item2);
+        Assertions.assertTrue(productsPage.isAddingValid(vegetables));
+    }
 
-        List<ProductItem> items = new ArrayList<>();
-        items.add(item1);
-        items.add(item2);
+    private static boolean isFruitsAlreadyExists(){
+//        productsPage = new ProductsPage(driver);
+        return productsPage.isAddingValid(fruits);
+    }
 
-        Assertions.assertTrue(productsPage.isAddingValid(items));
+    private static boolean isVegetablesAlreadyExists(){
+//        productsPage = new ProductsPage(driver);
+        return productsPage.isAddingValid(vegetables);
     }
 }

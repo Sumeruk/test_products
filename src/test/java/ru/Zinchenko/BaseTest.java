@@ -14,14 +14,14 @@ public class BaseTest {
     protected static WebDriver driver;
 
     @BeforeAll
-    public static void initEach(){
+    public static void initAll(){
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
         driver.get(AppProperties.getProperty(PropConst.BASE_URL));
     }
 
     @AfterAll
-    public static void close(){
+    public static void closeAll(){
         driver.quit();
     }
 }

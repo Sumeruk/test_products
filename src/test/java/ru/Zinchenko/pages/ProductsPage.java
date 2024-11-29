@@ -1,20 +1,21 @@
 package ru.Zinchenko.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.Zinchenko.items.ProductItem;
+import ru.Zinchenko.properties.AppProperties;
+import ru.Zinchenko.utils.PropConst;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class ProductsPage {
-
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -28,11 +29,6 @@ public class ProductsPage {
     }
 
     public WebElement getButtonAdd() {
-        try {
-            sleep(500);
-        } catch (InterruptedException ex){
-            System.out.println(ex.getMessage());
-        }
         return wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@class='btn btn-primary']")));
     }
@@ -62,17 +58,31 @@ public class ProductsPage {
     }
 
     public List<WebElement> getCellsFromRow(WebElement row) {
-        try {
-            sleep(1000);
-        } catch (InterruptedException ex) {
-            System.out.println(ex.getMessage());
+        List<WebElement> cells = new ArrayList<>();
+
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                cells = row.findElements(By.tagName("td"));
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Get cells");
+            }
         }
-        return row.findElements(By.tagName("td"));
+
+        return cells;
     }
 
     public void sendName(String name) {
         WebElement input = getInputName();
-        input.click();
+
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                input.click();
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Input name");
+            }
+        }
         input.sendKeys(name);
     }
 
@@ -90,7 +100,16 @@ public class ProductsPage {
     }
 
     public void clickAdd() {
-        getButtonAdd().click();
+
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                getButtonAdd().click();
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". add button");
+            }
+        }
+
     }
     public void clickSave(){
         getButtonSave().click();
@@ -108,8 +127,17 @@ public class ProductsPage {
 
     public boolean isAddingValid(List<ProductItem> items) {
         int countFounded = 0;
+        List<WebElement> rows = new ArrayList<>();
         WebElement table = getTable();
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                rows = table.findElements(By.tagName("tr"));
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Get lines");
+            }
+        }
+
         for (WebElement row: rows){
 
             List<WebElement> cells = getCellsFromRow(row);
@@ -130,8 +158,24 @@ public class ProductsPage {
     }
 
     public void reset() {
-        getDropdown().click();
-        getResetButton().click();
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                getDropdown().click();
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Get dropdown");
+            }
+        }
+
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                getResetButton().click();
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Reset button");
+            }
+        }
+
     }
 
 }
