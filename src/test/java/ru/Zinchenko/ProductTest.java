@@ -2,23 +2,22 @@ package ru.Zinchenko;
 
 import org.junit.jupiter.api.*;
 import ru.Zinchenko.items.ProductItem;
+import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.utils.TypeOfProduct;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductTest extends BaseTest {
-    private ProductsPage productsPage;
+    private static ProductsPage productsPage;
 
     @AfterEach
-    @Override
-    public void close(){
+    public void resetValues(){
         productsPage.reset();
-        driver.quit();
     }
     @Test
     public void testAddFruits(){
-        productsPage = new ProductsPage(super.driver);
+        productsPage = new ProductsPage(driver);
 
         ProductItem itemBanana = new ProductItem("банан", TypeOfProduct.FRUIT.getName(), false);
         ProductItem itemDurian = new ProductItem("Дуриан", TypeOfProduct.FRUIT.getName(), true);
