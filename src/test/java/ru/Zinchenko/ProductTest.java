@@ -4,23 +4,16 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledIf;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.pages.ProductsPage;
-import ru.Zinchenko.utils.TypeOfProduct;
+import ru.Zinchenko.properties.ReadJsons;
+import ru.Zinchenko.utils.PropConst;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductTest extends BaseTest {
     private static ProductsPage productsPage = new ProductsPage(driver);
-    private static List<ProductItem> fruits = new ArrayList<>(Arrays.asList(
-            new ProductItem("банан", TypeOfProduct.FRUIT.getName(), false),
-            new ProductItem("Дуриан", TypeOfProduct.FRUIT.getName(), true)
-    ));
+    private static List<ProductItem> fruits = ReadJsons.readInProductItemsList(PropConst.PATH_TO_FRUITS);
 
-    private static List<ProductItem> vegetables = new ArrayList<>(Arrays.asList(
-            new ProductItem("картофель", TypeOfProduct.VEGETABLE.getName(), false),
-            new ProductItem("Мандурия", TypeOfProduct.VEGETABLE.getName(), true)
-    ));
+    private static List<ProductItem> vegetables = ReadJsons.readInProductItemsList(PropConst.PATH_TO_VEGETABLES);
 
     @AfterEach
     public void resetValues(){

@@ -11,6 +11,9 @@ public class ProductItem {
         this.isExotic = isExotic;
     }
 
+    public ProductItem() {
+    }
+
     public String getName() {
         return name;
     }
@@ -31,7 +34,7 @@ public class ProductItem {
         return isExotic;
     }
 
-    public void setExotic(boolean exotic) {
+    public void setIsExotic(boolean exotic) {
         isExotic = exotic;
     }
 }
