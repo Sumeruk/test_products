@@ -7,5 +7,6 @@ public class PropConst {
     public static final String ERR_MESSAGE_FOR_STALE_ELEMENT = "StaleElementReferenceException was thrown: try";
     public static final String PATH_TO_FRUITS = "src/test/resources/fruits.json";
     public static final String PATH_TO_VEGETABLES = "src/test/resources/vegetables.json";
+    public static final String PATH_TO_EXIST_PRODUCT = "src/test/resources/existItem.json";
 
 }

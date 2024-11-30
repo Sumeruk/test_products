@@ -18,6 +18,15 @@ public class ReadJsons {
             System.out.println(io.getMessage());
             return null;
         }
+    }
 
+    public static ProductItem readProduct(String nameFile){
+        File json = new File(nameFile);
+        try {
+            return objectMapper.readValue(json, ProductItem.class);
+        } catch (IOException io){
+            System.out.println(io.getMessage());
+            return null;
+        }
     }
 }
