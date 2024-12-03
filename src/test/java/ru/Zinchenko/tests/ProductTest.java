@@ -1,4 +1,4 @@
-package ru.Zinchenko;
+package ru.Zinchenko.tests;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledIf;
@@ -9,6 +9,7 @@ import ru.Zinchenko.DB.repository.Repository;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.properties.ReadJsons;
+import ru.Zinchenko.tests.BaseTest;
 import ru.Zinchenko.utils.PropConst;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class ProductTest extends BaseTest {
         productsPage.reset();
     }
     @Test
-    @Order(2)
     @DisabledIf("isFruitsAlreadyExists")
     public void testAddFruits(){
 //        productsPage = new ProductsPage(driver);
@@ -53,7 +53,6 @@ public class ProductTest extends BaseTest {
 //        return productsPage.isAddingValid(fruits);
     }
     @Test
-    @Order(3)
     @DisabledIf("isVegetablesAlreadyExists")
     public void testAddVegetables(){
 
