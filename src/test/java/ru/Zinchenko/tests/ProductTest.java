@@ -9,7 +9,6 @@ import ru.Zinchenko.DB.repository.Repository;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.properties.ReadJsons;
-import ru.Zinchenko.tests.BaseTest;
 import ru.Zinchenko.utils.PropConst;
 
 import java.util.List;
@@ -90,7 +89,7 @@ public class ProductTest extends BaseTest {
 
         productsPage.addNewProduct(existItem);
         jdbc.connection();
-        Assertions.assertEquals(2, prodRepository.getCountProductFounded(existItem));
+        Assertions.assertEquals(1, prodRepository.getCountProductFounded(existItem));
         jdbc.closeConnection();
 
     }

@@ -21,10 +21,10 @@ public class ProductsPage {
 
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
-        this.wait =  new WebDriverWait(driver, Duration.ofSeconds(100));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(100));
     }
 
-    public WebElement getTable(){
+    public WebElement getTable() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@class='table']")));
     }
 
@@ -33,27 +33,27 @@ public class ProductsPage {
                 By.xpath("//button[@class='btn btn-primary']")));
     }
 
-    public WebElement getInputName(){
+    public WebElement getInputName() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='name']")));
     }
 
-    public WebElement getInputType(){
+    public WebElement getInputType() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@id='type']")));
     }
 
-    public WebElement getInputExotic(){
+    public WebElement getInputExotic() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='exotic']")));
     }
 
-    public WebElement getButtonSave(){
+    public WebElement getButtonSave() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='save']")));
     }
 
-    public WebElement getDropdown(){
+    public WebElement getDropdown() {
         return driver.findElement(By.xpath("//a[@id='navbarDropdown']"));
     }
 
-    public WebElement getResetButton(){
+    public WebElement getResetButton() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='reset']")));
     }
 
@@ -111,7 +111,8 @@ public class ProductsPage {
         }
 
     }
-    public void clickSave(){
+
+    public void clickSave() {
         getButtonSave().click();
     }
 
@@ -138,7 +139,7 @@ public class ProductsPage {
             }
         }
 
-        for (WebElement row: rows){
+        for (WebElement row : rows) {
 
             List<WebElement> cells = getCellsFromRow(row);
 
@@ -155,6 +156,37 @@ public class ProductsPage {
         }
 
         return countFounded == items.size();
+    }
+
+    public boolean isItemExist(ProductItem item) {
+        int countFounded = 0;
+        List<WebElement> rows = new ArrayList<>();
+        WebElement table = getTable();
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                rows = table.findElements(By.tagName("tr"));
+                break;
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Get lines");
+            }
+        }
+
+        for (WebElement row : rows) {
+
+            List<WebElement> cells = getCellsFromRow(row);
+
+            if (!cells.isEmpty() &&
+                    cells.get(0).getText().equals(item.getName()) &&
+                    cells.get(1).getText().equals(item.getType()) &&
+                    cells.get(2).getText().equals(String.valueOf(item.isExotic()))) {
+
+                countFounded++;
+                break;
+            }
+
+        }
+
+        return countFounded == 1;
     }
 
     public void reset() {

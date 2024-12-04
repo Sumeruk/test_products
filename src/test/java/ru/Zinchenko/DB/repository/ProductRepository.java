@@ -55,7 +55,6 @@ public class ProductRepository implements Repository{
             int isExotic = (item.isExotic()) ? 1 : 0;
             statement.setInt(3, isExotic);
 
-            System.out.println(item.getName() + " " + type + " " + isExotic);
             ResultSet res = statement.executeQuery();
 
             return getCountFromResultSet(res);
