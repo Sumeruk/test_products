@@ -7,6 +7,10 @@ import io.cucumber.java.ru.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import ru.Zinchenko.DB.JDBC;
+import ru.Zinchenko.DB.JDBCImpl;
+import ru.Zinchenko.DB.repository.ProductRepository;
+import ru.Zinchenko.DB.repository.Repository;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.properties.AppProperties;
@@ -19,12 +23,15 @@ public class CucTest {
     private static ProductsPage page;
     private ProductItem newProduct;
 
+    private JDBC jdbc = JDBCImpl.getInstance();
+    private Repository rep = new ProductRepository();
+
     @Допустим("пользователь хочет добавить новый товар")
-    public void пользователь_хочет_добавить_новый_товар() {
+    public void wantToSetNewProduct() {
     }
 
     @И("пользователь открыл страницу с товарами")
-    public void пользователь_открыл_страницу_с_товарами() {
+    public void openPageWithProducts() {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
         driver.get(AppProperties.getProperty(PropConst.BASE_URL));
@@ -33,14 +40,20 @@ public class CucTest {
     }
 
     @After(value = "@only_scenario_hooks")
-    public void after() {
-        System.out.println("after scenario");
+    public void afterAddNewProduct() {
+        newProduct = null;
+        page.reset();
+        driver.quit();
+    }
+
+    @After(value = "@exist_hook")
+    public void afterAddExistProduct() {
         page.reset();
         driver.quit();
     }
 
     @Если("товара нет в таблице")
-    public void checkProductExist(DataTable dataTable) {
+    public void checkProductExistFalse(DataTable dataTable) {
         ProductItem item = ProductTableTransformer.transform(dataTable);
         if (page.isItemExist(item)) {
             throw new PendingException();
@@ -52,15 +65,33 @@ public class CucTest {
     }
 
     @Когда("пользователь заполняет форму для добавления нового товара")
-    public void пользователь_заполняет_форму_для_добавления_нового_товара(DataTable dataTable) {
+    public void userSetDataOfNewProduct(DataTable dataTable) {
         newProduct = ProductTableTransformer.transform(dataTable);
     }
     @Когда("нажимает кнопку \"Сохранить\"")
-    public void нажимает_кнопку() {
+    public void clickButtonSave() {
         page.addNewProduct(newProduct);
     }
     @То("новый товар отображается в списке товаров")
-    public void новый_товар_отображается_в_списке_товаров() {
+    public void newProductIsOnPage() {
         Assertions.assertTrue(page.isItemExist(newProduct));
+    }
+
+
+    @Если("товар есть в таблице")
+    public void checkProductExistTrue(DataTable dataTable) {
+        ProductItem item = ProductTableTransformer.transform(dataTable);
+        if (!page.isItemExist(item)) {
+            jdbc.connection();
+            rep.add(item);
+            jdbc.closeConnection();
+        }
+    }
+
+    @То("не происходит дублирования товаров в списке товаров")
+    public void isProductNotDuplicate() {
+        jdbc.connection();
+        Assertions.assertEquals(1, rep.getCountProductFounded(newProduct));
+        jdbc.closeConnection();
     }
 }
