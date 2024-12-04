@@ -25,6 +25,13 @@ public class ProductsPage {
     }
 
     public WebElement getTable() {
+        for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
+            try {
+                return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@class='table']")));
+            } catch (StaleElementReferenceException ex) {
+                System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + " Get table");
+            }
+        }
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@class='table']")));
     }
 
@@ -129,9 +136,10 @@ public class ProductsPage {
     public boolean isAddingValid(List<ProductItem> items) {
         int countFounded = 0;
         List<WebElement> rows = new ArrayList<>();
-        WebElement table = getTable();
+        WebElement table;
         for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
             try {
+                table = getTable();
                 rows = table.findElements(By.tagName("tr"));
                 break;
             } catch (StaleElementReferenceException ex) {

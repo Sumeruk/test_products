@@ -4,7 +4,15 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.ru.*;
+//import io.qameta.allure.Epic;
+//import io.qameta.allure.Step;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import ru.Zinchenko.DB.JDBC;
@@ -17,6 +25,7 @@ import ru.Zinchenko.properties.AppProperties;
 import ru.Zinchenko.utils.PropConst;
 
 import java.time.Duration;
+
 
 public class CucTest {
     private static WebDriver driver;
@@ -67,12 +76,17 @@ public class CucTest {
     @Когда("пользователь заполняет форму для добавления нового товара")
     public void userSetDataOfNewProduct(DataTable dataTable) {
         newProduct = ProductTableTransformer.transform(dataTable);
+        Allure.getLifecycle().updateTestCase(result ->
+                result.setName("Добавление товара " + newProduct.getName()));
+        Allure.description("Добавление нового товара. Ожидается добавление товара на страницу");
     }
     @Когда("нажимает кнопку \"Сохранить\"")
     public void clickButtonSave() {
         page.addNewProduct(newProduct);
     }
     @То("новый товар отображается в списке товаров")
+    @Description("Проверка добавления нового товара")
+    @Test
     public void newProductIsOnPage() {
         Assertions.assertTrue(page.isItemExist(newProduct));
     }
@@ -88,8 +102,16 @@ public class CucTest {
         }
     }
 
+//    @Epic("Проверка дублирования товара")
     @То("не происходит дублирования товаров в списке товаров")
+    @Description("Проверка добавления существующего товара")
+
     public void isProductNotDuplicate() {
+        Allure.getLifecycle().updateTestCase(result ->
+                result.setName("Добавление существующего товара " + newProduct.getName()));
+        Allure.description("Добавление существующего товара. " +
+                "Ожидаются отсутсвие изменений в списке товаров");
+
         jdbc.connection();
         Assertions.assertEquals(1, rep.getCountProductFounded(newProduct));
         jdbc.closeConnection();

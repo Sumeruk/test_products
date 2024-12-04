@@ -1,5 +1,6 @@
 package ru.Zinchenko;
 
+import io.qameta.allure.Epic;
 import org.junit.platform.suite.api.*;
 
 import static io.cucumber.core.options.Constants.FEATURES_PROPERTY_NAME;
@@ -11,5 +12,6 @@ import static io.cucumber.core.options.Constants.GLUE_PROPERTY_NAME;
         @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/resources/features"),
         @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "ru.Zinchenko.tests.cucTests")
 })
+@Epic("Cucumber Tests")
 public class RunCucumber {
 }
