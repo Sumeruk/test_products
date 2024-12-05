@@ -84,10 +84,10 @@ public class CucTest {
     public void clickButtonSave() {
         page.addNewProduct(newProduct);
     }
+
     @То("новый товар отображается в списке товаров")
-    @Description("Проверка добавления нового товара")
-    @Test
     public void newProductIsOnPage() {
+//        Assertions.assertTrue(true);
         Assertions.assertTrue(page.isItemExist(newProduct));
     }
 
@@ -102,10 +102,7 @@ public class CucTest {
         }
     }
 
-//    @Epic("Проверка дублирования товара")
     @То("не происходит дублирования товаров в списке товаров")
-    @Description("Проверка добавления существующего товара")
-
     public void isProductNotDuplicate() {
         Allure.getLifecycle().updateTestCase(result ->
                 result.setName("Добавление существующего товара " + newProduct.getName()));
@@ -115,5 +112,6 @@ public class CucTest {
         jdbc.connection();
         Assertions.assertEquals(1, rep.getCountProductFounded(newProduct));
         jdbc.closeConnection();
+//        Assertions.assertTrue(true);
     }
 }
