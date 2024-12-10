@@ -1,19 +1,23 @@
 package ru.Zinchenko.tests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.Zinchenko.Specifications;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.properties.AppProperties;
+import ru.Zinchenko.properties.ReadJsons;
 import ru.Zinchenko.utils.PropConst;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.*;
 
@@ -21,9 +25,11 @@ import static io.restassured.RestAssured.*;
 public class APITests {
     ObjectMapper objectMapper = new ObjectMapper();
     private String JSESSIONID = "260C04CBDED283942832EFBD2AFCF55D";
+    private static List<ProductItem> fruits = ReadJsons.readInProductItemsList(PropConst.PATH_TO_FRUITS_API);
+    private static List<ProductItem> vegetables = ReadJsons.readInProductItemsList(PropConst.PATH_TO_VEGETABLES_API);
 
     @BeforeEach
-    public void resetValues(){
+    public void resetValues() {
         given()
                 .baseUri(AppProperties.getProperty(PropConst.BASE_URL_API))
                 .cookie("JSESSIONID", JSESSIONID)
@@ -32,10 +38,19 @@ public class APITests {
                 .post();
     }
 
-    @Test
-    public void addProductTest() {
-        ProductItem addItem = new ProductItem("banan", "FRUIT", false);
+    private static Stream<Arguments> provideFruitsArguments() {
+        return fruits.stream().map(Arguments::of);
+    }
 
+    private static Stream<Arguments> provideVegetablesArguments() {
+        return vegetables.stream().map(Arguments::of);
+    }
+
+    @DisplayName("API тест добавления фрукта")
+    @ParameterizedTest
+    @MethodSource("provideFruitsArguments")
+    public void addFruitTest(ProductItem addItem) {
+        System.out.println(addItem.getType());
         Specifications.installSpecifications(
                 Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
                 Specifications.responseSpecifications(200));
@@ -44,25 +59,59 @@ public class APITests {
                 .basePath("/food")
                 .cookie("JSESSIONID", JSESSIONID)
                 .body(addItem)
+                .log().all()
                 .when()
                 .post()
                 .then();
 
-
-        List<ProductItem> responseList =
+        List<ProductItem> responseListOfProducts =
                 given()
-                .baseUri(AppProperties.getProperty(PropConst.BASE_URL_API))
+                        .basePath("/food")
+                        .when()
+                        .cookie("JSESSIONID", JSESSIONID)
+                        .get()
+                        .then()
+                        .log().all()
+                        .extract()
+                        .jsonPath()
+                        .getList("$.", ProductItem.class);
+
+        assertThat(responseListOfProducts.get(responseListOfProducts.size() - 1), Matchers.equalTo(addItem));
+
+
+    }
+
+    @DisplayName("API тест добавления овоща")
+    @ParameterizedTest
+    @MethodSource("provideFruitsArguments")
+    public void addVegetableTest(ProductItem addItem) {
+        System.out.println(addItem.getType());
+        Specifications.installSpecifications(
+                Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
+                Specifications.responseSpecifications(200));
+
+        given()
                 .basePath("/food")
-                .when()
                 .cookie("JSESSIONID", JSESSIONID)
-                .get()
-                .then()
-                .extract()
-                .jsonPath()
-                .getList("$.", ProductItem.class);
+                .body(addItem)
+                .log().all()
+                .when()
+                .post()
+                .then();
 
-        assertThat(responseList.get(responseList.size() - 1), Matchers.equalTo(addItem));
+        List<ProductItem> responseListOfProducts =
+                given()
+                        .basePath("/food")
+                        .when()
+                        .cookie("JSESSIONID", JSESSIONID)
+                        .get()
+                        .then()
+                        .log().all()
+                        .extract()
+                        .jsonPath()
+                        .getList("$.", ProductItem.class);
 
+        assertThat(responseListOfProducts.get(responseListOfProducts.size() - 1), Matchers.equalTo(addItem));
     }
 
 }
