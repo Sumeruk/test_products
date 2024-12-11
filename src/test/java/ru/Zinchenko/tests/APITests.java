@@ -1,12 +1,17 @@
 package ru.Zinchenko.tests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.Zinchenko.DB.JDBC;
+import ru.Zinchenko.DB.JDBCImpl;
+import ru.Zinchenko.DB.repository.ProductRepository;
+import ru.Zinchenko.DB.repository.Repository;
 import ru.Zinchenko.Specifications;
 import ru.Zinchenko.items.ProductItem;
 import ru.Zinchenko.properties.AppProperties;
@@ -23,7 +28,8 @@ import static io.restassured.RestAssured.*;
 
 
 public class APITests {
-    ObjectMapper objectMapper = new ObjectMapper();
+    private static JDBC jdbc = JDBCImpl.getInstance();
+    private static Repository prodRepository = new ProductRepository();
     private String JSESSIONID = "260C04CBDED283942832EFBD2AFCF55D";
     private static List<ProductItem> fruits = ReadJsons.readInProductItemsList(PropConst.PATH_TO_FRUITS_API);
     private static List<ProductItem> vegetables = ReadJsons.readInProductItemsList(PropConst.PATH_TO_VEGETABLES_API);
@@ -85,7 +91,6 @@ public class APITests {
     @ParameterizedTest
     @MethodSource("provideFruitsArguments")
     public void addVegetableTest(ProductItem addItem) {
-        System.out.println(addItem.getType());
         Specifications.installSpecifications(
                 Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
                 Specifications.responseSpecifications(200));
@@ -112,6 +117,36 @@ public class APITests {
                         .getList("$.", ProductItem.class);
 
         assertThat(responseListOfProducts.get(responseListOfProducts.size() - 1), Matchers.equalTo(addItem));
+    }
+
+    @Test
+    public void testAddExistProduct(){
+        ProductItem existItem = ReadJsons.readProduct(PropConst.PATH_TO_EXIST_PRODUCT);
+        ProductItem existItemAPI = ReadJsons.readProduct(PropConst.PATH_TO_EXIST_PRODUCT_API);
+
+        jdbc.connection();
+        if (prodRepository.getCountProductFounded(existItem) == 0){
+            prodRepository.add(existItem);
+        }
+        jdbc.closeConnection();
+
+        Specifications.installSpecifications(
+                Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
+                Specifications.responseSpecifications(200));
+
+        given()
+                .basePath("/food")
+                .cookie("JSESSIONID", JSESSIONID)
+                .body(existItemAPI)
+                .log().all()
+                .when()
+                .post();
+
+
+        jdbc.connection();
+        Assertions.assertEquals(1, prodRepository.getCountProductFounded(existItem));
+        jdbc.closeConnection();
+
     }
 
 }

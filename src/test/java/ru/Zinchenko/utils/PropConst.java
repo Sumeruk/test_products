@@ -11,5 +11,6 @@ public class PropConst {
     public static final String PATH_TO_VEGETABLES = "src/test/resources/jsons/vegetables.json";
     public static final String PATH_TO_VEGETABLES_API = "src/test/resources/jsons/vegetablesAPI.json";
     public static final String PATH_TO_EXIST_PRODUCT = "src/test/resources/jsons/existItem.json";
+    public static final String PATH_TO_EXIST_PRODUCT_API = "src/test/resources/jsons/existItemAPI.json";
 
 }
