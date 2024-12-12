@@ -89,7 +89,7 @@ public class APITests {
 
     @DisplayName("API тест добавления овоща")
     @ParameterizedTest
-    @MethodSource("provideFruitsArguments")
+    @MethodSource("provideVegetablesArguments")
     public void addVegetableTest(ProductItem addItem) {
         Specifications.installSpecifications(
                 Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
