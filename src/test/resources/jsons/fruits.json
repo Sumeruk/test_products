@@ -1,0 +1,4 @@
+[
+  {"name": "банан", "type": "Фрукт", "exotic": false},
+  {"name": "Дуриан", "type": "Фрукт", "exotic": true}
+]

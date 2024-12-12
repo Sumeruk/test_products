@@ -1,14 +1,23 @@
 package ru.Zinchenko.items;
 
-public class ProductItem {
-    String name;
-    String type;
-    boolean isExotic;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-    public ProductItem(String name, String type, boolean isExotic) {
+import java.util.Objects;
+
+@JsonPropertyOrder({"name", "type", "exotic"})
+public class ProductItem {
+    @JsonProperty("name")
+    String name;
+    @JsonProperty("type")
+    String type;
+    @JsonProperty("exotic")
+    boolean exotic;
+
+    public ProductItem(String name, String type, boolean exotic) {
         this.name = name;
         this.type = type;
-        this.isExotic = isExotic;
+        this.exotic = exotic;
     }
 
     public ProductItem() {
@@ -31,10 +40,19 @@ public class ProductItem {
     }
 
     public boolean isExotic() {
-        return isExotic;
+        return exotic;
     }
 
     public void setIsExotic(boolean exotic) {
-        isExotic = exotic;
+        this.exotic = exotic;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductItem item = (ProductItem) o;
+        return exotic == item.exotic && Objects.equals(name, item.name) && Objects.equals(type, item.type);
+    }
+
 }

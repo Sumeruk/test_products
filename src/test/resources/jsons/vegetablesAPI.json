@@ -1,0 +1,4 @@
+[
+  {"name": "картофель", "type": "VEGETABLE", "exotic": false},
+  {"name": "Мандурия", "type": "VEGETABLE", "exotic": true}
+]
