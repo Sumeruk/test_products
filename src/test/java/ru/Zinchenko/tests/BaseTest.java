@@ -2,10 +2,8 @@ package ru.Zinchenko.tests;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import ru.Zinchenko.managers.DriverManager;
 import ru.Zinchenko.properties.AppProperties;
 import ru.Zinchenko.utils.PropConst;
 
@@ -17,7 +15,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void initAll(){
-        driver = new ChromeDriver();
+        driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
         driver.manage().window().maximize();
 

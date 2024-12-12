@@ -20,6 +20,7 @@ import ru.Zinchenko.DB.JDBCImpl;
 import ru.Zinchenko.DB.repository.ProductRepository;
 import ru.Zinchenko.DB.repository.Repository;
 import ru.Zinchenko.items.ProductItem;
+import ru.Zinchenko.managers.DriverManager;
 import ru.Zinchenko.pages.ProductsPage;
 import ru.Zinchenko.properties.AppProperties;
 import ru.Zinchenko.utils.PropConst;
@@ -41,7 +42,7 @@ public class CucTest {
 
     @И("пользователь открыл страницу с товарами")
     public void openPageWithProducts() {
-        driver = new ChromeDriver();
+        driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
         driver.get(AppProperties.getProperty(PropConst.BASE_URL));
 

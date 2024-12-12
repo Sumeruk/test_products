@@ -30,7 +30,7 @@ import static io.restassured.RestAssured.*;
 public class APITests {
     private static JDBC jdbc = JDBCImpl.getInstance();
     private static Repository prodRepository = new ProductRepository();
-    private String JSESSIONID = "260C04CBDED283942832EFBD2AFCF55D";
+    private String JSESSIONID = "4F59E79C3081B3C694EC542AC98C6C61";
     private static List<ProductItem> fruits = ReadJsons.readInProductItemsList(PropConst.PATH_TO_FRUITS_API);
     private static List<ProductItem> vegetables = ReadJsons.readInProductItemsList(PropConst.PATH_TO_VEGETABLES_API);
 
