@@ -1,6 +1,6 @@
 node('unix') {
     stage('Git checkout') {
-        checkout scmGit(branches: [[name: '*/add_jenkins']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Sumeruk/test_products.git']])
+        checkout scm
     }
 
     stage('Start test') {
