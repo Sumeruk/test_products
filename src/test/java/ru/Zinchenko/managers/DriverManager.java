@@ -19,7 +19,8 @@ public class DriverManager {
     private static WebDriver driver;
 
     public static WebDriver getDriver() {
-        if (driver == null){
+
+        if (driver == null || driver.toString().contains("null")) {
             initDriver();
         }
         return driver;
@@ -29,11 +30,13 @@ public class DriverManager {
         if (AppProperties.getProperty("type.driver").equals("remote")){
             initRemoteDriver();
         }
-        switch (AppProperties.getProperty("type.browser")) {
-            case "chrome" -> driver = new ChromeDriver();
-            case "firefox" -> driver = new FirefoxDriver();
-            default -> Assert.state(false, "Browser doesn't exist");
+        else {
+            switch (AppProperties.getProperty("type.browser")) {
+                case "chrome" -> driver = new ChromeDriver();
+                case "firefox" -> driver = new FirefoxDriver();
+                default -> Assert.state(false, "Browser doesn't exist");
 
+            }
         }
     }
 
@@ -42,6 +45,7 @@ public class DriverManager {
         Map<String, Object> selenoidOptions = new HashMap<>();
         selenoidOptions.put("browserName", AppProperties.getProperty("type.browser"));
         selenoidOptions.put("browserVersion", "109.0");
+        selenoidOptions.put("screenResolution", "1280x1024x24");
         selenoidOptions.put("enableVNC", true);
         selenoidOptions.put("enableVideo", false);
         capabilities.setCapability("selenoid:options", selenoidOptions);

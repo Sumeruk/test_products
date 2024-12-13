@@ -73,6 +73,7 @@ public class ProductsPage {
                 break;
             } catch (StaleElementReferenceException ex) {
                 System.out.println(PropConst.ERR_MESSAGE_FOR_STALE_ELEMENT + " " + i + ". Get cells");
+
             }
         }
 
@@ -167,11 +168,18 @@ public class ProductsPage {
     }
 
     public boolean isItemExist(ProductItem item) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex){
+            System.out.println("wait before load page");
+        }
+
         int countFounded = 0;
         List<WebElement> rows = new ArrayList<>();
-        WebElement table = getTable();
+        WebElement table;
         for (int i = 0; i < Integer.parseInt(AppProperties.getProperty(PropConst.RETRY_NUMBER)); i++) {
             try {
+                table = getTable();
                 rows = table.findElements(By.tagName("tr"));
                 break;
             } catch (StaleElementReferenceException ex) {

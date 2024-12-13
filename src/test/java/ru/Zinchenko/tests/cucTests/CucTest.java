@@ -10,9 +10,7 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import ru.Zinchenko.DB.JDBC;
@@ -42,6 +40,7 @@ public class CucTest {
 
     @И("пользователь открыл страницу с товарами")
     public void openPageWithProducts() {
+//        driver = new ChromeDriver();
         driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
         driver.get(AppProperties.getProperty(PropConst.BASE_URL));
@@ -59,6 +58,11 @@ public class CucTest {
     @After(value = "@exist_hook")
     public void afterAddExistProduct() {
         page.reset();
+        driver.close();
+    }
+
+    @AfterAll
+    public static void quitDriver(){
         driver.quit();
     }
 
