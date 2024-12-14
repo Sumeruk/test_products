@@ -1,5 +1,6 @@
 package ru.Zinchenko.tests;
 
+import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,18 +31,17 @@ import static io.restassured.RestAssured.*;
 public class APITests {
     private static JDBC jdbc = JDBCImpl.getInstance();
     private static Repository prodRepository = new ProductRepository();
-    private String JSESSIONID = "4F59E79C3081B3C694EC542AC98C6C61";
+    private String JSESSIONID;
     private static List<ProductItem> fruits = ReadJsons.readInProductItemsList(PropConst.PATH_TO_FRUITS_API);
     private static List<ProductItem> vegetables = ReadJsons.readInProductItemsList(PropConst.PATH_TO_VEGETABLES_API);
 
     @BeforeEach
     public void resetValues() {
-        given()
+        Response resp = given()
                 .baseUri(AppProperties.getProperty(PropConst.BASE_URL_API))
-                .cookie("JSESSIONID", JSESSIONID)
                 .basePath("/data/reset")
-                .when()
                 .post();
+        JSESSIONID = resp.getSessionId();
     }
 
     private static Stream<Arguments> provideFruitsArguments() {
@@ -81,7 +81,6 @@ public class APITests {
                         .extract()
                         .jsonPath()
                         .getList("$.", ProductItem.class);
-
         assertThat(responseListOfProducts.get(responseListOfProducts.size() - 1), Matchers.equalTo(addItem));
 
 

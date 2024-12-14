@@ -7,6 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import ru.Zinchenko.properties.AppProperties;
+import ru.Zinchenko.utils.PropConst;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -27,7 +28,7 @@ public class DriverManager {
     }
 
     private static void initDriver() {
-        if (AppProperties.getProperty("type.driver").equals("remote")){
+        if (AppProperties.getProperty(PropConst.DRIVER_LOCATION).equals("remote")){
             initRemoteDriver();
         }
         else {

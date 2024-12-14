@@ -1,9 +1,12 @@
 package ru.Zinchenko.DB;
 
+import ru.Zinchenko.properties.AppProperties;
+import ru.Zinchenko.utils.PropConst;
+
 import java.sql.*;
 
 public class JDBCImpl implements JDBC{
-    static String url = "jdbc:h2:tcp://127.0.0.1:9092/mem:testdb";
+    static String url = AppProperties.getProperty(PropConst.BASE_URL_DB);
     static String username = "user";
     static String password = "pass";
     private static Connection connection;
