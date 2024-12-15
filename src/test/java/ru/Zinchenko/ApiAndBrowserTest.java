@@ -6,5 +6,5 @@ import org.junit.platform.suite.api.Suite;
 
 @SelectPackages("ru.Zinchenko.tests")
 @Suite
-public class TestSuite {
+public class ApiAndBrowserTest {
 }

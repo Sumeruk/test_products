@@ -8,13 +8,16 @@ import java.util.Properties;
 public class AppProperties {
 
     private static FileInputStream fileInputStream;
-    private static Properties prop;
+    private static Properties applicationProp;
+    private static Properties systemProp;
 
     static {
         try {
             fileInputStream = new FileInputStream("src/test/resources/application.properties");
-            prop = new Properties();
-            prop.load(fileInputStream);
+            applicationProp = new Properties();
+            applicationProp.load(fileInputStream);
+
+            systemProp = System.getProperties();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -28,7 +31,10 @@ public class AppProperties {
     }
 
     public static String getProperty(String key) {
-        return prop.getProperty(key);
+        if (!(systemProp.getProperty(key) == null)){
+            return systemProp.getProperty(key);
+        }
+        return applicationProp.getProperty(key);
     }
 }
 

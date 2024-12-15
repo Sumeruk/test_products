@@ -12,5 +12,5 @@ import static io.cucumber.core.options.Constants.*;
         @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "ru.Zinchenko.tests.cucTests"),
         @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
 })
-public class RunCucumber {
+public class CucumberTest {
 }
