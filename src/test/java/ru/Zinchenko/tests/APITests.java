@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import static io.restassured.RestAssured.*;
 
 
+@DisplayName("API тесты для добавления товаров")
 public class APITests {
     private static JDBC jdbc = JDBCImpl.getInstance();
     private static Repository prodRepository = new ProductRepository();
@@ -53,10 +54,9 @@ public class APITests {
     }
 
     @DisplayName("API тест добавления фрукта")
-    @ParameterizedTest
+    @ParameterizedTest()
     @MethodSource("provideFruitsArguments")
     public void addFruitTest(ProductItem addItem) {
-        System.out.println(addItem.getType());
         Specifications.installSpecifications(
                 Specifications.requestSpecifications(AppProperties.getProperty(PropConst.BASE_URL_API)),
                 Specifications.responseSpecifications(200));
@@ -118,7 +118,9 @@ public class APITests {
         assertThat(responseListOfProducts.get(responseListOfProducts.size() - 1), Matchers.equalTo(addItem));
     }
 
-    @Test
+    @DisplayName("API тест добавления существующего товара")
+//    @Story("API тест добавления существующего товара")
+    @Test()
     public void testAddExistProduct(){
         ProductItem existItem = ReadJsons.readProduct(PropConst.PATH_TO_EXIST_PRODUCT);
         ProductItem existItemAPI = ReadJsons.readProduct(PropConst.PATH_TO_EXIST_PRODUCT_API);

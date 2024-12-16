@@ -55,4 +55,12 @@ public class ProductItem {
         return exotic == item.exotic && Objects.equals(name, item.name) && Objects.equals(type, item.type);
     }
 
+    @Override
+    public String toString() {
+        return "ProductItem {" +
+                "name = '" + name + '\'' +
+                ", type = '" + type + '\'' +
+                ", exotic = " + exotic +
+                '}';
+    }
 }

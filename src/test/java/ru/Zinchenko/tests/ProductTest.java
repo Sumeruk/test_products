@@ -13,6 +13,7 @@ import ru.Zinchenko.utils.PropConst;
 
 import java.util.List;
 
+@DisplayName("Тест добавления товаров через браузер")
 public class ProductTest extends BaseTest {
     private static JDBC jdbc = JDBCImpl.getInstance();
 
@@ -25,6 +26,8 @@ public class ProductTest extends BaseTest {
     public void resetValues(){
         productsPage.reset();
     }
+
+    @DisplayName("Добавление фруктов")
     @Test
     @DisabledIf("isFruitsAlreadyExists")
     public void testAddFruits(){
@@ -51,6 +54,8 @@ public class ProductTest extends BaseTest {
 //        productsPage = new ProductsPage(driver);
 //        return productsPage.isAddingValid(fruits);
     }
+
+    @DisplayName("Добавление овощей")
     @Test
     @DisabledIf("isVegetablesAlreadyExists")
     public void testAddVegetables(){
@@ -77,6 +82,7 @@ public class ProductTest extends BaseTest {
 //        return productsPage.isAddingValid(vegetables);
     }
 
+    @DisplayName("Добавление существующего товара")
     @Test
     public void testAddExistProduct(){
         ProductItem existItem = ReadJsons.readProduct(PropConst.PATH_TO_EXIST_PRODUCT);
