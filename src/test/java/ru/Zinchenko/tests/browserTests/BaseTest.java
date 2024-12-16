@@ -1,9 +1,8 @@
-package ru.Zinchenko.tests;
+package ru.Zinchenko.tests.browserTests;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import ru.Zinchenko.managers.DriverManager;
 import ru.Zinchenko.properties.AppProperties;
 import ru.Zinchenko.utils.PropConst;

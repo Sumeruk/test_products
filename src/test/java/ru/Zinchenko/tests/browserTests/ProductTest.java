@@ -1,4 +1,4 @@
-package ru.Zinchenko.tests;
+package ru.Zinchenko.tests.browserTests;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledIf;

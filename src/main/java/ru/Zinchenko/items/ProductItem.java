@@ -3,10 +3,11 @@ package ru.Zinchenko.items;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @JsonPropertyOrder({"name", "type", "exotic"})
-public class ProductItem {
+public class ProductItem implements Serializable {
     @JsonProperty("name")
     String name;
     @JsonProperty("type")
