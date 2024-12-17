@@ -81,9 +81,6 @@ public class CucTest {
     @Когда("пользователь заполняет форму для добавления нового товара")
     public void userSetDataOfNewProduct(DataTable dataTable) {
         newProduct = ProductTableTransformer.transform(dataTable);
-        Allure.getLifecycle().updateTestCase(result ->
-                result.setName("Добавление товара " + newProduct.getName()));
-        Allure.description("Добавление нового товара. Ожидается добавление товара на страницу");
     }
     @Когда("нажимает кнопку \"Сохранить\"")
     public void clickButtonSave() {
@@ -109,11 +106,6 @@ public class CucTest {
 
     @То("не происходит дублирования товаров в списке товаров")
     public void isProductNotDuplicate() {
-        Allure.getLifecycle().updateTestCase(result ->
-                result.setName("Добавление существующего товара " + newProduct.getName()));
-        Allure.description("Добавление существующего товара. " +
-                "Ожидаются отсутсвие изменений в списке товаров");
-
         jdbc.connection();
         Assertions.assertEquals(1, rep.getCountProductFounded(newProduct));
         jdbc.closeConnection();
