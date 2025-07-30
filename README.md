@@ -11,4 +11,7 @@
 - Selenium WebDriver;
 - JUnit 5;
 - Cucumber;
+- REST Assured;
+- Selenoid;
+- Jenkins;
 - Allure reports.
